@@ -14,5 +14,4 @@ const userTokensSchema = new mongoose.Schema({
 
 // validation and save password
 
-const UserToken = mongoose.model("UserTokens", userTokensSchema);
-module.exports = UserToken;
+export const UserToken = mongoose.model("UserTokens", userTokensSchema);

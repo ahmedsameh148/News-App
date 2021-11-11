@@ -7,6 +7,12 @@ import mongoose from "mongoose";
 async function connect() {
   await mongoose.connect("mongodb://localhost:27017/myapp");
 }
+
+async function userFound(username: string) {
+  if (await User.findOne({ username })) return true;
+  return false;
+}
+
 async function addToken(id: string, token: string) {
   await UserToken.deleteOne({ userID: id });
   await new UserToken({
@@ -15,22 +21,21 @@ async function addToken(id: string, token: string) {
   }).save();
 }
 
-export async function LoginController(req: Request, res: Response) {
-  connect();
+export async function RegisterController(req: Request, res: Response) {
+  await connect();
   const body = req.body;
-  const username: string = body.username;
-  const password: string = body.password;
+  const username = body.username;
+  const password = body.password;
 
-  const hashedPassword: string = new EncryptPassword()
+  const hashedPassword = new EncryptPassword()
     .setPlainPassword(password)
     .encrypt();
 
-  const user = await User.findOne({ username, password: hashedPassword });
-  if (!user) {
-    return res.json({
-      message: "Please Enter A Valid username and password",
-    });
+  if (await userFound(username)) {
+    return res.json({ message: "The User Is Already Found" });
   }
+
+  const user = await new User({ username, password: hashedPassword }).save();
   const token = new EncryptPassword()
     .setPlainPassword(user._id + new Date().toISOString())
     .encrypt();

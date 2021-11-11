@@ -8,11 +8,6 @@ async function connect() {
   await mongoose.connect("mongodb://localhost:27017/myapp");
 }
 
-async function userFound(username: string) {
-  if (await User.findOne({ username })) return true;
-  return false;
-}
-
 async function addToken(id: string, token: string) {
   await UserToken.deleteOne({ userID: id });
   await new UserToken({
@@ -30,10 +25,6 @@ export async function RegisterController(req: Request, res: Response) {
   const hashedPassword = new EncryptPassword()
     .setPlainPassword(password)
     .encrypt();
-
-  if (await userFound(username)) {
-    return res.json({ message: "The User Is Already Found" });
-  }
 
   const user = await new User({ username, password: hashedPassword }).save();
   const token = new EncryptPassword()

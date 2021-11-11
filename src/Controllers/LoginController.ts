@@ -18,8 +18,8 @@ async function addToken(id: string, token: string) {
 export async function LoginController(req: Request, res: Response) {
   connect();
   const body = req.body;
-  const username: string = body.username;
-  const password: string = body.password;
+  const username = body.username;
+  const password = body.password;
 
   const hashedPassword: string = new EncryptPassword()
     .setPlainPassword(password)

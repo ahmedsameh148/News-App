@@ -1,5 +1,5 @@
 import { AppMiddlewareInterface } from "../Core/Interfaces/AppMiddleware.Interface";
-import express, { Request, Response } from "express";
+import { Request, Response } from "express";
 
 export class CheckUsernameAndPasswordMiddleware
   implements AppMiddlewareInterface

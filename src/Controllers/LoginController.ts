@@ -2,11 +2,7 @@ import { EncryptPassword } from "../Services/EncryptPassword";
 import { User } from "../DB/Models/User";
 import { UserToken } from "../DB/Models/UserToken";
 import { Request, Response } from "express";
-import mongoose from "mongoose";
 
-async function connect() {
-  await mongoose.connect("mongodb://localhost:27017/myapp");
-}
 async function addToken(id: string, token: string) {
   await UserToken.deleteOne({ userID: id });
   await new UserToken({
@@ -16,7 +12,6 @@ async function addToken(id: string, token: string) {
 }
 
 export async function LoginController(req: Request, res: Response) {
-  connect();
   const body = req.body;
   const username = body.username;
   const password = body.password;
